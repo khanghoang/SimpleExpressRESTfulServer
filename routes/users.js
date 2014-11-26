@@ -2,7 +2,8 @@ var express = require('express');
 var app = express();
 var mongoskin = require('mongoskin')
 
-var db = mongoskin.db('mongodb://localhost:27017/test', {safe: true})
+var dbConnectString = app.get('env') === 'development' ? 'mongodb://localhost:27017/test' : "mongodb://<user>:<password>@dogen.mongohq.com:10044/app31968851"
+var db = mongoskin.db(dbConnectString, {safe: true})
 
 exports.connectUser = function(req, res, next){
     console.log(req.collection)

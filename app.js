@@ -42,6 +42,7 @@ app.get('/', function(req, res, next, collection){
 // USERS
 app.post('/collections/users', routes.users.connectUser, routes.users.createUser)
 app.get('/collections/users', routes.users.connectUser, routes.users.listUsers)
+app.get('/collections/users/:userID', routes.users.connectUser, routes.users.getUserByUserID)
 
 // development error handler
 // will print stacktrace

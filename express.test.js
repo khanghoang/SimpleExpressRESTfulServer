@@ -14,13 +14,15 @@ describe('express test api server', function(){
   var DatabaseCleaner 
   var databaseCleaner
 
+  var id
+
   beforeEach(function(done){
     DatabaseCleaner = require('database-cleaner')
     databaseCleaner = new DatabaseCleaner('mongodb')
     done()
   })
 
-  afterEach(function(done){
+  after(function(done){
     databaseCleaner.clean(db, function(e, db){
       done()
     })  
@@ -35,9 +37,27 @@ describe('express test api server', function(){
     .end(function(e, res){
       expect(e).to.eql(null)
       expect(typeof res.body).to.eql('object')
+      id = res.body[0]._id
       done()
     })
   })
 
+  it('get list users', function(done){
+    superagent.get('http://localhost:3000/collections/users')
+    .end(function(e, res){
+      expect(e).to.eql(null)
+      expect(res.body.length).to.be.above(0)
+      done()
+    })
+  })
+  
+  it('get users details by id', function(done){
+    superagent.get('http://localhost:3000/collections/users/' + id)
+    .end(function(e, res){
+      expect(e).to.eql(null)
+      expect(res.body._id).to.eql(id)
+      done()
+    })
+  })
 
 })

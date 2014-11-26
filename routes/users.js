@@ -6,7 +6,7 @@ var dbConnectString = app.get('env') === 'development' ? 'mongodb://localhost:27
 var db = mongoskin.db(dbConnectString, {safe: true})
 
 exports.connectUser = function(req, res, next){
-    req.collection = db.collection("User")
+    req.collection = db.collection("Users")
     console.log(req.collection)
     return next()
 }

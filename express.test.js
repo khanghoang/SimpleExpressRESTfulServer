@@ -26,10 +26,8 @@ describe('express test api server', function(){
   })
 
   after(function(done){
-    console.log(usersModule.db())
-    databaseCleaner.clean(usersModule.db(), function(e, db){
+    databaseCleaner.clean(usersModule.db, function(e, db){
       if(e) console.log(e)
-      console.log(usersModule.db())
       done()
     })  
   })

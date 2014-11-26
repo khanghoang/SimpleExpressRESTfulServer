@@ -3,22 +3,19 @@ var mongoskin = require('mongoskin')
 
 var app = express()
 
-var dbConnectString 
-var db
+var env = app.get("env")
+console.log(env)
+if("test" === env) {
+  dbConnectString = 'mongodb://localhost:27017/memcard-test'
+} else if ("development" === env) {
+  dbConnectString = 'mongodb://localhost:27017/memcard'
+} else {
+  dbConnectString = 'mongodb://khang:12332145@dogen.mongohq.com:10044/app31968851'
+}
+
+db = mongoskin.db(dbConnectString, {safe: true})
 
 exports.connectUser = function(req, res, next){
-  var env = app.get("env")
-  console.log(env)
-  if("test" === env) {
-    dbConnectString = 'mongodb://localhost:27017/memcard-test'
-  } else if ("development" === env) {
-    dbConnectString = 'mongodb://localhost:27017/memcard'
-  } else {
-    dbConnectString = 'mongodb://khang:12332145@dogen.mongohq.com:10044/app31968851'
-  }
-
-  db = mongoskin.db(dbConnectString, {safe: true})
-  console.log(env)
   req.collection = db.collection("Users")
   return next()
 }
@@ -48,18 +45,5 @@ exports.getUserByUserID = function(req, res, next){
     })
 }
 
-exports.db = function() {
-  var env = process.env.NODE_ENV
-  if("test" === env) {
-    dbConnectString = 'mongodb://localhost:27017/memcard-test'
-  } else if ("development" === env) {
-    dbConnectString = 'mongodb://localhost:27017/memcard'
-  } else {
-    dbConnectString = 'mongodb://khang:12332145@dogen.mongohq.com:10044/app31968851'
-  }
-
-  db = mongoskin.db(dbConnectString, {safe: true})
-  return db
-}
-
+exports.db = db
 exports.app = app

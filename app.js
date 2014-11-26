@@ -1,3 +1,5 @@
+require('dotenv').load();
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -66,7 +68,9 @@ app.use(function(err, req, res, next) {
     });
 });
 
-server = app.listen(3000, function () {
+var port = process.env.port || 3000
+
+server = app.listen(port, function () {
     var host = server.address().address
     var port = server.address().port
 

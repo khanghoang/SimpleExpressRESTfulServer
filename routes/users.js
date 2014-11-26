@@ -32,7 +32,6 @@ exports.listUsers = function(req, res, next){
 exports.getUserByUserID = function(req, res, next){
   id = req.params.userID
   req.collection.findById(id, function(e, results) {
-      console.log(results)
       if(e) return next(e)
         res.send(results)
     })

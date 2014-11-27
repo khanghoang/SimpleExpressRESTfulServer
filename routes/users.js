@@ -37,13 +37,13 @@ exports.listUsers = function(req, res, next){
     })
 }
 
-exports.getUserByUserID = function getUserByUserID(req, res, next){
+function abc(req, res, next){
   _getUser(req, next, function(results){
     res.send(results)
   })
 }
 
- 
+exports.getUserByUserID = abc
 
 exports.updateUserByUserID = function(req, res, next){
   // get user

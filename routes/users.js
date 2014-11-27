@@ -37,12 +37,47 @@ exports.listUsers = function(req, res, next){
     })
 }
 
-exports.getUserByUserID = function(req, res, next){
+function getUserByUserID(req, res, next){
   id = req.params.userID
   req.collection.findById(id, function(e, results) {
       if(e) return next(e)
         res.send(results)
     })
+}
+
+exports.getUserByUserID = getUserByUserID
+
+exports.updateUserByUserID = function(req, res, next){
+  // get user
+  getUser(req, next, function(user){
+    // update
+    req.collection.update({_id:user._id}, extend({}, user, req.body), function(e, results) {
+      if(e)
+        return next(e)
+        
+      getUserByUserID(req, res, next)      
+    })
+  })
+}
+
+// private functions
+function getUser(req, next, cb){
+  id = req.params.userID
+  req.collection.findById(id, function(e, results) {
+      if(e) return next(e)
+      cb(results)
+    })
+}
+
+// helpers
+function extend(target) {
+  var sources = [].slice.call(arguments, 1);
+  sources.forEach(function (source) {
+    for (var prop in source) {
+      target[prop] = source[prop];
+    }
+  });
+  return target;
 }
 
 exports.db = db

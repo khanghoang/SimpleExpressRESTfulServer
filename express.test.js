@@ -14,6 +14,7 @@ describe('express test api server', function(){
   var databaseCleaner
 
   var id
+  var originName
 
   before(function(done){
     DatabaseCleaner = require('database-cleaner')
@@ -33,9 +34,10 @@ describe('express test api server', function(){
   })
 
   it('create user', function(done){
+    originName = faker.name.firstName()
     superagent.post('http://localhost:3001/collections/users')
     .send({
-      name: "This is very espencial " + faker.name.firstName(),
+      name: originName,
       email: faker.internet.email()
     })
     .end(function(e, res){
@@ -60,6 +62,20 @@ describe('express test api server', function(){
     .end(function(e, res){
       expect(e).to.eql(null)
       expect(res.body._id).to.eql(id)
+      done()
+    })
+  })
+
+  it('update users', function(done){
+    var email = faker.internet.email()
+    superagent.put('http://localhost:3001/collections/users/' + id)
+    .send({
+      email: email
+    })
+    .end(function(e, res){
+      expect(e).to.eql(null)
+      expect(res.body.email).to.eql(email)
+      expect(res.body.name).to.eql(originName)
       done()
     })
   })

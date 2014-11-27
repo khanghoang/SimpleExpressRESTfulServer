@@ -80,4 +80,13 @@ describe('express test api server', function(){
     })
   })
 
+  it('delete user', function(done){
+    superagent.del('http://localhost:3001/collections/users/' + id)
+    .end(function(e, res){
+      expect(e).to.eql(null)
+      expect(res.body.length).to.equal(0)
+      done()
+    })
+  })
+
 })

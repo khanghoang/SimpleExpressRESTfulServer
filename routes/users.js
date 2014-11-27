@@ -39,6 +39,17 @@ exports.listUsers = function(req, res, next){
 
 exports.getUserByUserID = _getUserByUserID
 
+exports.deleteUserByUserID = function(req, res, next) {
+  var userID = req.params.userID
+  req.collection.remove({_id: userID}, function(e, r){
+    if(e) {
+      return res.send("Error when delete user")
+    }
+
+    res.send(200, [])
+  })
+}
+
 exports.updateUserByUserID = function(req, res, next){
   // get user
   var userID = req.params.userID

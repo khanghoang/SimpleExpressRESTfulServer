@@ -51,7 +51,7 @@ exports.updateUserByUserID = function(req, res, next){
   // get user
   getUser(req, next, function(user){
     // update
-    req.collection.update({_id:user._id}, extend({}, user, req.body), function(e, results) {
+    req.collection.update({_id:user._id}, {$set:req.body}, function(e, results) {
       if(e)
         return next(e)
         
@@ -61,23 +61,12 @@ exports.updateUserByUserID = function(req, res, next){
 }
 
 // private functions
-function getUser(req, next, cb){
+function _getUser(req, next, cb){
   id = req.params.userID
   req.collection.findById(id, function(e, results) {
       if(e) return next(e)
       cb(results)
     })
-}
-
-// helpers
-function extend(target) {
-  var sources = [].slice.call(arguments, 1);
-  sources.forEach(function (source) {
-    for (var prop in source) {
-      target[prop] = source[prop];
-    }
-  });
-  return target;
 }
 
 exports.db = db

@@ -38,12 +38,9 @@ exports.listUsers = function(req, res, next){
 }
 
 function getUserByUserID(req, res, next){
-  id = req.params.userID
-  _getUser(req, next, res.send(results))
-  // req.collection.findById(id, function(e, results) {
-  //     if(e) return next(e)
-  //       res.send(results)
-  //   })
+  _getUser(req, next, function(results){
+    res.send(results)
+  })
 }
 
 exports.getUserByUserID = getUserByUserID
@@ -55,7 +52,6 @@ exports.updateUserByUserID = function(req, res, next){
     req.collection.update({_id:user._id}, {$set:req.body}, function(e, results) {
       if(e)
         return next(e)
-        
       getUserByUserID(req, res, next)      
     })
   })

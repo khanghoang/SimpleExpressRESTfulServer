@@ -37,13 +37,13 @@ exports.listUsers = function(req, res, next){
     })
 }
 
-function getUserByUserID(req, res, next){
+exports.getUserByUserID = function getUserByUserID(req, res, next){
   _getUser(req, next, function(results){
     res.send(results)
   })
 }
 
-exports.getUserByUserID = getUserByUserID
+ 
 
 exports.updateUserByUserID = function(req, res, next){
   // get user
@@ -60,6 +60,7 @@ exports.updateUserByUserID = function(req, res, next){
 // private functions
 function _getUser(req, next, cb){
   id = req.params.userID
+  if(!e) return next(new Error("User ID not found"))
   req.collection.findById(id, function(e, results) {
       if(e) return next(e)
       cb(results)

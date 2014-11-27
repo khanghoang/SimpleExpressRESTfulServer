@@ -49,7 +49,7 @@ exports.getUserByUserID = getUserByUserID
 
 exports.updateUserByUserID = function(req, res, next){
   // get user
-  getUser(req, next, function(user){
+  _getUser(req, next, function(user){
     // update
     req.collection.update({_id:user._id}, {$set:req.body}, function(e, results) {
       if(e)

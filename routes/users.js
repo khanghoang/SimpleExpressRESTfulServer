@@ -41,13 +41,22 @@ exports.getUserByUserID = _getUserByUserID
 
 exports.updateUserByUserID = function(req, res, next){
   // get user
-  _getUser(req, next, function(user){
-    // update
-    req.collection.update({_id:user._id}, {$set:req.body}, function(e, results) {
-      if(e)
-        return next(e)
-      _getUserByUserID(req, res, next)      
-    })
+  var userID = req.params.userID
+
+  console.log(userID)
+
+  req.collection.updateById(userID, {$set:req.body}, {safe: true, multi: false}, function(e, r) {
+
+    if(e)
+      return next(e)
+    
+    console.log("result = " + r)
+
+    _getUser(req, next, function(results){
+      console.log(results)
+      res.send(results)
+    })      
+
   })
 }
 

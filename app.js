@@ -6,10 +6,25 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var oauthServer = require('oauth2-server');
 
 var routes = require('./routes');
 
 var app = express();
+
+var mongoose = require('mongoose');
+
+var uristring = 'mongodb://localhost/memcard';
+
+// Makes connection asynchronously. Mongoose will queue up database
+// operations and release them when the connection is complete.
+mongoose.connect(uristring, function (err, res) {
+  if (err) {
+    console.log ('ERROR connecting to: ' + uristring + '. ' + err);
+  } else {
+    console.log ('Succeeded connected to: ' + uristring);
+  }
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,6 +37,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// OAUTH
+app.oauth = oauthServer({
+  model: require('./oauth/models'),
+  grants: ['password'],
+  debug: true
+})
+
+app.all('/oauth/token', app.oauth.grant())
+app.use(app.oauth.errorHandler())
 
 var domain = require('domain');
 var defaultHandler = require('errorhandler');
@@ -46,7 +71,7 @@ app.post('/collections/users', routes.users.connectUser, routes.users.createUser
 app.get('/collections/users', routes.users.connectUser, routes.users.listUsers)
 app.get('/collections/users/:userID', routes.users.connectUser, routes.users.getUserByUserID)
 app.put('/collections/users/:userID', routes.users.connectUser, routes.users.updateUserByUserID)
-app.del('/collections/users/:userID', routes.users.connectUser, routes.users.deleteUserByUserID)
+app.delete('/collections/users/:userID', routes.users.connectUser, routes.users.deleteUserByUserID)
 
 // development error handler
 // will print stacktrace

@@ -1,19 +1,10 @@
 var express = require('express');
 var mongoskin = require('mongoskin')
+var databaseModule = require('../databaseModule')
 
 var app = express()
 
-var env = app.get("env")
-console.log(env)
-if("test" === env) {
-  dbConnectString = 'mongodb://localhost:27017/memcard-test'
-} else if ("development" === env) {
-  dbConnectString = 'mongodb://localhost:27017/memcard'
-} else {
-  dbConnectString = 'mongodb://khang:12332145@dogen.mongohq.com:10044/app31968851'
-}
-
-db = mongoskin.db(dbConnectString, {safe: true})
+db = databaseModule.db
 
 exports.connectUser = function(req, res, next){
   req.collection = db.collection("Users")

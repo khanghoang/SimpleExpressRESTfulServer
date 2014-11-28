@@ -6,7 +6,8 @@ var express = require('express');
 
 var faker = require('faker');
 
-var usersModule = require('./routes/users');
+var databaseModule = require('./databaseModule');
+db = databaseModule.db().collection("User")
 
 describe('express test api server', function(){
 

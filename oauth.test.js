@@ -6,9 +6,9 @@ var express = require('express');
 
 var faker = require('faker');
 
-var usersModule = require('./routes/users');
+var database = require('./databaseModule');
 
-describe('test oauth', function(){
+describe('Test OAuth 2 server', function(){
   var DatabaseCleaner 
   var databaseCleaner
 
@@ -26,7 +26,7 @@ describe('test oauth', function(){
   })
 
   after(function(done){
-    databaseCleaner.clean(usersModule.db, function(e, db){
+    databaseCleaner.clean(db, function(e, db){
       if(e) console.log(e)
       done()
     })  

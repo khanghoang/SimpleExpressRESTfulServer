@@ -6,7 +6,8 @@ var express = require('express');
 
 var faker = require('faker');
 
-var database = require('./databaseModule');
+var databaseModule = require('./databaseModule');
+db = databaseModule.db()
 
 describe('Test OAuth 2 server', function(){
   var DatabaseCleaner 

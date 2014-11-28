@@ -73,7 +73,6 @@ model.getClient = function (clientId, clientSecret, callback) {
   if (clientSecret === null) {
     return OAuthClientsModel.findOne({ clientId: clientId }, callback);
   }
-  console.log("here")
   OAuthClientsModel.findOne({ clientId: clientId, clientSecret: clientSecret }, callback);
 };
 

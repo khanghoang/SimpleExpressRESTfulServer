@@ -16,3 +16,7 @@ exports.db = function(){
   db = mongoskin.db(dbConnectString, {safe: true})
   return db
 }
+
+exports.db_uri = 'mongodb://localhost:27017/memcard-test'
+
+

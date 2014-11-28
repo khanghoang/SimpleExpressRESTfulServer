@@ -1,3 +1,7 @@
+global.rootRequire = function(name) {
+  return require(__dirname + '/' + name);
+}
+
 require('dotenv').load();
 
 var express = require('express');
@@ -7,6 +11,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var oauthServer = require('oauth2-server');
+var databaseModule = require('./modules/database-module');
 
 var routes = require('./routes');
 
@@ -14,7 +19,9 @@ var app = express();
 
 var mongoose = require('mongoose');
 
-var uristring = 'mongodb://localhost/memcard';
+// var uristring = databaseModule.db_uri
+var uristring = 'mongodb://localhost:27017/memcard-test'
+console.log(uristring)
 
 // Makes connection asynchronously. Mongoose will queue up database
 // operations and release them when the connection is complete.

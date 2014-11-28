@@ -4,7 +4,7 @@ var databaseModule = require('../databaseModule')
 
 var app = express()
 
-db = databaseModule.db
+db = databaseModule.db()
 
 exports.connectUser = function(req, res, next){
   req.collection = db.collection("Users")

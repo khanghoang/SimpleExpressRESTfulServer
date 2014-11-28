@@ -7,7 +7,7 @@ var express = require('express');
 var faker = require('faker');
 
 var databaseModule = require('./databaseModule');
-db = databaseModule.db().collection("User")
+db = databaseModule.db()
 
 describe('express test api server', function(){
 
@@ -28,7 +28,7 @@ describe('express test api server', function(){
   })
 
   after(function(done){
-    databaseCleaner.clean(usersModule.db, function(e, db){
+    databaseCleaner.clean(db, function(e, database){
       if(e) console.log(e)
       done()
     })  

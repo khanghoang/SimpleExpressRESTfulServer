@@ -1,6 +1,6 @@
 var express = require('express');
 var mongoskin = require('mongoskin')
-var databaseModule = require('../databaseModule')
+var databaseModule = require.main.require('./modules/database-module')
 
 var app = express()
 

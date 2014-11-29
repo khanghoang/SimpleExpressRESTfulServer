@@ -19,8 +19,7 @@ var app = express();
 
 var mongoose = require('mongoose');
 
-// var uristring = databaseModule.db_uri
-var uristring = 'mongodb://localhost:27017/memcard-test'
+var uristring = databaseModule.db_uri
 console.log(uristring)
 
 // Makes connection asynchronously. Mongoose will queue up database

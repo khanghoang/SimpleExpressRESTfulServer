@@ -6,7 +6,6 @@ var express = require('express');
 
 var faker = require('faker');
 
-// var databaseModule = require.main.require('./modules/database-module')
 var databaseModule = require('database-module');
 db = databaseModule.db()
 

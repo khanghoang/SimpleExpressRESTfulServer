@@ -27,7 +27,7 @@ describe('Test OAuth 2 server', function(){
     DatabaseCleaner = require('database-cleaner')
     databaseCleaner = new DatabaseCleaner('mongodb')
 
-    clientID = "authorizedClientId"
+    clientID = faker.internet.userName()
     clientSecret = faker.internet.password()
     clientUsername = faker.internet.userName()
     clientPassword = faker.internet.password()
@@ -41,10 +41,16 @@ describe('Test OAuth 2 server', function(){
         })
     },
       function(callback){
-        db.collection("oauthclients").insert({clientId: clientID, clientSecret: clientPassword}, function(e, db){
+        db.collection("oauthclients").insert({clientId: clientID, clientSecret: clientSecret}, function(e, db){
         callback()
         })
-      }],
+      },
+      function(callback){
+        db.collection("oauthauthorizedclients").insert({clientId: clientID, clientSecret: clientSecret}, function(e, db){
+        callback()
+        })
+      }
+    ],
     function(err, results){
       done()
     })
@@ -55,26 +61,21 @@ describe('Test OAuth 2 server', function(){
   })
 
   after(function(done){
-    done()
-    // databaseCleaner.clean(db, function(e, db){
-    //   if(e) console.log(e)
-    //   done()
-    // })  
+    // done()
+    databaseCleaner.clean(db, function(e, db){
+      if(e) console.log(e)
+      done()
+    })  
   })
 
   it('get token', function(done){
     var params = {
       grant_type: grantType,
-      //TODO: refactor the oauth/models to get 
-      //authorized client id
       client_id: clientID,
       client_secret: clientSecret,
       username: clientUsername,
       password: clientPassword
     }
-
-    console.log(params)
-
     superagent.post('http://localhost:3001/oauth/token')
     .type("form")
     .send(params)

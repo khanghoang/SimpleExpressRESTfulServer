@@ -49,13 +49,20 @@ var OAuthUsersSchema = new Schema({
   email: { type: String, default: '' }
 });
 
+var OAuthAuthorizedClientsSchema = new Schema({
+  clientId: { type: String },
+  clientSercet: { type: String }
+});
+
 mongoose.model('OAuthAccessTokens', OAuthAccessTokensSchema);
 mongoose.model('OAuthRefreshTokens', OAuthRefreshTokensSchema);
+mongoose.model('OAuthAuthorizedClients', OAuthAuthorizedClientsSchema);
 mongoose.model('OAuthClients', OAuthClientsSchema);
 mongoose.model('OAuthUsers', OAuthUsersSchema);
 
 var OAuthAccessTokensModel = mongoose.model('OAuthAccessTokens'),
   OAuthRefreshTokensModel = mongoose.model('OAuthRefreshTokens'),
+  OAuthAuthorizedClientsModel = mongoose.model('OAuthAuthorizedClients'),
   OAuthClientsModel = mongoose.model('OAuthClients'),
   OAuthUsersModel = mongoose.model('OAuthUsers');
 
@@ -78,15 +85,17 @@ model.getClient = function (clientId, clientSecret, callback) {
 
 // This will very much depend on your setup, I wouldn't advise doing anything exactly like this but
 // it gives an example of how to use the method to resrict certain grant types
-var authorizedClientIds = ['s6BhdRkqt3', 'toto', "authorizedClientId"];
+// var authorizedClientIds = ['s6BhdRkqt3', 'toto', "authorizedClientId"];
 model.grantTypeAllowed = function (clientId, grantType, callback) {
   console.log('in grantTypeAllowed (clientId: ' + clientId + ', grantType: ' + grantType + ')');
 
-  if (grantType === 'password') {
-    return callback(false, authorizedClientIds.indexOf(clientId) >= 0);
-  }
-
-  callback(false, true);
+   OAuthAuthorizedClientsModel.find({clientId: clientId}, {_id: 0, clientSecret: 0}, function(error, clients){
+     console.log(clients)
+     if (grantType === 'password') {
+       return callback(false, clients.length >= 0);
+     }
+     callback(false, true);
+   })
 };
 
 model.saveAccessToken = function (token, clientId, expires, userId, callback) {
